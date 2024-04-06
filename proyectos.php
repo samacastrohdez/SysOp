@@ -113,6 +113,7 @@
                         <div class="row mt-3">
                             <div class="col-md-12">
                                 <input type="text" class="form-control bg-light border-0 small" placeholder="Cliente" name="cliente"  required>
+                                    
                                 <input type="hidden" name="tipo_usuario" value="<?php echo $tipo_usuario; ?>">
                             </div>
                         </div>
