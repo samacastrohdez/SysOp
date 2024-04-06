@@ -1,41 +1,39 @@
-<?php include('./include/head.php'); 
-
+<?php
+    include('./include/head.php');
     require "conexion.php";
     session_start();
-    if($_POST){
+
+    if ($_POST) {
         $correo = $_POST['correo'];
         $password = $_POST['password'];
 
-        $sql = "SELECT  id, password, tipo_usuario, nombre FROM usuarios WHERE  correo= '$correo' ";
-        $resultado  = $mysqli->query($sql);
+        $sql = "SELECT id, password, tipo_usuario, nombre FROM usuarios WHERE correo = '$correo'";
+        $resultado = $mysqli->query($sql);
         $num = $resultado->num_rows;
-        // Si existe el usuario
-        if($num>0){
+        
+        if ($num > 0) {
             $row = $resultado->fetch_assoc();
             $password_bd = $row['password'];
             $pass_c = sha1($password);
-            if($password_bd == $pass_c){
-                $_SESSION['id'] =$row['id'];
-                $_SESSION['nombre'] =$row['nombre'];
-                $_SESSION['tipo_usuario'] =$row['tipo_usuario'];
+
+            if ($password_bd == $pass_c) {
+                $_SESSION['id'] = $row['id'];
+                $_SESSION['nombre'] = $row['nombre'];
+                $_SESSION['tipo_usuario'] = $row['tipo_usuario'];
 
                 header("Location: bienvenido.php");
-
-
-            }else{
-                echo "contraseña no coincide";
+                exit();
+            } else {
+                echo '<div class="alert alert-danger" role="alert">
+                        La contraseña no coincide.
+                    </div>';
             }
-
-        }else{
-            echo "no existe usuario";
+        } else {
+            echo '<div class="alert alert-danger" role="alert">
+                    El usuario no existe.
+                </div>';
         }
     }
-
-
-
-
-
-
 ?>
 
 <br>

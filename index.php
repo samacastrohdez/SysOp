@@ -1,41 +1,39 @@
-<?php include('./include/head.php'); 
+<?php
+include('./include/head.php');
+require "conexion.php";
+session_start();
 
-    require "conexion.php";
-    session_start();
-    if($_POST){
-        $correo = $_POST['correo'];
-        $password = $_POST['password'];
+if ($_POST) {
+    $correo = $_POST['correo'];
+    $password = $_POST['password'];
 
-        $sql = "SELECT  id, password, tipo_usuario, nombre FROM usuarios WHERE  correo= '$correo' ";
-        $resultado  = $mysqli->query($sql);
-        $num = $resultado->num_rows;
-        // Si existe el usuario
-        if($num>0){
-            $row = $resultado->fetch_assoc();
-            $password_bd = $row['password'];
-            $pass_c = sha1($password);
-            if($password_bd == $pass_c){
-                $_SESSION['id'] =$row['id'];
-                $_SESSION['nombre'] =$row['nombre'];
-                $_SESSION['tipo_usuario'] =$row['tipo_usuario'];
+    $sql = "SELECT id, password, tipo_usuario, nombre FROM usuarios WHERE correo = '$correo'";
+    $resultado = $mysqli->query($sql);
+    $num = $resultado->num_rows;
+    
+    if ($num > 0) {
+        $row = $resultado->fetch_assoc();
+        $password_bd = $row['password'];
+        $pass_c = sha1($password);
 
-                header("Location: bienvenido.php");
+        if ($password_bd == $pass_c) {
+            $_SESSION['id'] = $row['id'];
+            $_SESSION['nombre'] = $row['nombre'];
+            $_SESSION['tipo_usuario'] = $row['tipo_usuario'];
 
-
-            }else{
-                echo "contraseña no coincide";
-            }
-
-        }else{
-            echo "no existe usuario";
+            header("Location: bienvenido.php");
+            exit();
+        } else {
+            echo '<div class="alert alert-danger" role="alert">
+                    La contraseña no coincide.
+                  </div>';
         }
+    } else {
+        echo '<div class="alert alert-danger" role="alert">
+                El usuario no existe.
+              </div>';
     }
-
-
-
-
-
-
+}
 ?>
 
 <br>
